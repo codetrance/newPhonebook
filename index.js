@@ -60,14 +60,31 @@ app.delete("/api/entries/:id", (request, response) => {
 
 app.use(express.json());
 
-app.post("/api/entries", (request, response) => {
+const generateId = () => {
   const maxId = entries.length > 0 ? Math.max(...entries.map((n) => n.id)) : 0;
+  return maxId + 1;
+};
 
-  const entry = request.body;
-  entry.id = maxId + 1;
+app.post("/api/entries", (request, response) => {
+  const body = request.body;
 
-  entries = entries.concat(entry);
-  response.json(entry);
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "name or number missing",
+    });
+  } else if (Object.values(entries).indexOf(body.name) > -1) {
+    return response.status(400).json({
+      error: "name already exists",
+    });
+  } else {
+    const entry = {
+      id: generateId(),
+      name: body.name,
+      number: body.number,
+    };
+    entries = entries.concat(entry);
+    response.json(entry);
+  }
 });
 
 const PORT = 3001;
