@@ -1,1 +1,13 @@
 GET http://localhost:3001/api/entries/
+
+###
+POST http://localhost:3001/api/entries/
+Content-Type: application/json
+
+{
+
+"id": 5,
+"name": "Nicholas Cage",
+"number": "12-43-2343234"
+
+}

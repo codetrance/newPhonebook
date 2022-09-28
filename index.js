@@ -58,6 +58,18 @@ app.delete("/api/entries/:id", (request, response) => {
   response.status(204).end();
 });
 
+app.use(express.json());
+
+app.post("/api/entries", (request, response) => {
+  const maxId = entries.length > 0 ? Math.max(...entries.map((n) => n.id)) : 0;
+
+  const entry = request.body;
+  entry.id = maxId + 1;
+
+  entries = entries.concat(entry);
+  response.json(entry);
+});
+
 const PORT = 3001;
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);
