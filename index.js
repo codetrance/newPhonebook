@@ -33,11 +33,22 @@ app.get("/api/entries", (request, response) => {
   response.json(entries);
 });
 
-let date_now = new Date();
 app.get("/info", (request, response) => {
   response.send(
-    `Phonebook has info for ${entries.length} people <br/> ${date_now}`
+    `Phonebook has info for ${entries.length} people <br/> ${new Date()}`
   );
+});
+
+app.get("/api/entries/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const entry = entries.find((entry) => entry.id === id);
+
+  if (entry) {
+    response.json(entry);
+  } else {
+    response.status(404).send("Item not found, please retry with valid ID");
+  }
+  response.json(entry);
 });
 
 const PORT = 3001;
