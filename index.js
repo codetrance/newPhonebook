@@ -72,7 +72,11 @@ app.post("/api/entries", (request, response) => {
     return response.status(400).json({
       error: "name or number missing",
     });
-  } else if (Object.values(entries).indexOf(body.name) > -1) {
+  } else if (
+    entries
+      .map((item) => item.name.toLowerCase())
+      .includes(body.name.toLowerCase())
+  ) {
     return response.status(400).json({
       error: "name already exists",
     });
