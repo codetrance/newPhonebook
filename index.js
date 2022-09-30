@@ -1,6 +1,9 @@
 const { response } = require("express");
 const express = require("express");
 const app = express();
+const morgan = require("morgan");
+const fs = require("fs");
+const path = require("path");
 
 let entries = [
   {
@@ -24,6 +27,9 @@ let entries = [
     number: "39-23-6423122",
   },
 ];
+
+morgan.token("body", (req) => JSON.stringify(req.body));
+app.use(morgan(":method :url :status :response-time[digits] :body"));
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!<h1>");
@@ -90,6 +96,8 @@ app.post("/api/entries", (request, response) => {
     response.json(entry);
   }
 });
+
+// const accessLogStream = fs.createWriteStream(path.join(__C:\Users\PuneetKittur\fullstack_exercises\newPhonebook\logs,'access.log'),{flags:'a'})
 
 const PORT = 3001;
 app.listen(PORT);
