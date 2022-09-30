@@ -4,6 +4,7 @@ const app = express();
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 
 let entries = [
   {
@@ -30,6 +31,8 @@ let entries = [
 
 morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(morgan(":method :url :status :response-time[digits] :body"));
+
+app.use(cors());
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!<h1>");
