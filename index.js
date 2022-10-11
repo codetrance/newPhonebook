@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { response } = require("express");
 const express = require("express");
 const app = express();
@@ -5,6 +6,10 @@ const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const Phonebook = require("./models/entry");
+
+// const url = `mongodb+srv://phonebookdb:lrszOtLHZ7eME4Sl@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
 
 let entries = [
   {
@@ -29,6 +34,23 @@ let entries = [
   },
 ];
 
+// mongoose.connect(url);
+
+// const phonebookSchema = new mongoose.Schema({
+//   name: String,
+//   number: String,
+// });
+
+// phonebookSchema.set("toJSON", {
+//   transform: (document, returnedObject) => {
+//     returnedObject.id = returnedObject._id.toString();
+//     delete returnedObject._id;
+//     delete returnedObject._v;
+//   },
+// });
+
+// const Phonebook = mongoose.model("Phonebook", phonebookSchema);
+
 morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(morgan(":method :url :status :response-time[digits] :body"));
 
@@ -41,7 +63,7 @@ app.get("/", (request, response) => {
 });
 
 app.get("/api/entries", (request, response) => {
-  response.json(entries);
+  Phonebook.find({}).then((entries) => response.json(entries));
 });
 
 app.get("/info", (request, response) => {
@@ -51,15 +73,18 @@ app.get("/info", (request, response) => {
 });
 
 app.get("/api/entries/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const entry = entries.find((entry) => entry.id === id);
-
-  if (entry) {
+  Phonebook.findById(request.params.id).then((entry) => {
     response.json(entry);
-  } else {
-    response.status(404).send("Item not found, please retry with valid ID");
-  }
-  response.json(entry);
+  });
+  // Previous code commented out to add the DB query of findbyID above
+  // const id = Number(request.params.id);
+  // const entry = entries.find((entry) => entry.id === id);
+  // if (entry) {
+  //   response.json(entry);
+  // } else {
+  //   response.status(404).send("Item not found, please retry with valid ID");
+  // }
+  // response.json(entry);
 });
 
 app.delete("/api/entries/:id", (request, response) => {
@@ -92,13 +117,14 @@ app.post("/api/entries", (request, response) => {
       error: "name already exists",
     });
   } else {
-    const entry = {
+    const entry = new Phonebook({
       id: generateId(),
       name: body.name,
       number: body.number,
-    };
-    entries = entries.concat(entry);
-    response.json(entry);
+    });
+    entry.save().then((savedEntry) => {
+      response.json(savedEntry);
+    });
   }
 });
 

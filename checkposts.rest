@@ -1,0 +1,7 @@
+post http://localhost:3001/api/entries/
+Content-Type: application/json
+
+{
+    "name": "Jambi Gumbi",
+    "number": "097-3453456"
+}

@@ -10,8 +10,6 @@ if (process.argv.length < 3) {
 const password = process.argv[2];
 let nameInput = process.argv[3];
 let numberInput = process.argv[4];
-console.log(typeof nameInput);
-console.log(typeof numberInput);
 
 const url = `mongodb+srv://phonebookdb:${password}@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -23,7 +21,6 @@ const phonebookSchema = new mongoose.Schema({
 const Phonebook = mongoose.model("Phonebook", phonebookSchema);
 
 if (nameInput || numberInput !== undefined) {
-  console.log("Checks done!");
   mongoose
     .connect(url)
     .then((result) => {
