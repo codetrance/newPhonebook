@@ -6,8 +6,9 @@ const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const Phonebook = require("./models/entry");
+app.use(cors());
+app.use(express.static("build"));
 
 // const url = `mongodb+srv://phonebookdb:lrszOtLHZ7eME4Sl@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -54,10 +55,6 @@ let entries = [
 morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(morgan(":method :url :status :response-time[digits] :body"));
 
-app.use(cors());
-
-app.use(express.static("build"));
-
 app.get("/", (request, response) => {
   response.send("<h1>Hello World!<h1>");
 });
@@ -76,15 +73,6 @@ app.get("/api/entries/:id", (request, response) => {
   Phonebook.findById(request.params.id).then((entry) => {
     response.json(entry);
   });
-  // Previous code commented out to add the DB query of findbyID above
-  // const id = Number(request.params.id);
-  // const entry = entries.find((entry) => entry.id === id);
-  // if (entry) {
-  //   response.json(entry);
-  // } else {
-  //   response.status(404).send("Item not found, please retry with valid ID");
-  // }
-  // response.json(entry);
 });
 
 app.delete("/api/entries/:id", (request, response) => {
@@ -96,10 +84,10 @@ app.delete("/api/entries/:id", (request, response) => {
 
 app.use(express.json());
 
-const generateId = () => {
-  const maxId = entries.length > 0 ? Math.max(...entries.map((n) => n.id)) : 0;
-  return maxId + 1;
-};
+// const generateId = () => {
+//   const maxId = entries.length > 0 ? Math.max(...entries.map((n) => n.id)) : 0;
+//   return maxId + 1;
+// };
 
 app.post("/api/entries", (request, response) => {
   const body = request.body;
@@ -118,7 +106,7 @@ app.post("/api/entries", (request, response) => {
     });
   } else {
     const entry = new Phonebook({
-      id: generateId(),
+      // id: generateId(),
       name: body.name,
       number: body.number,
     });
