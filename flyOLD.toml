@@ -1,9 +1,12 @@
-# fly.toml file generated for hostingphonebook on 2022-11-02T07:53:40+05:30
+# fly.toml file generated for hostingphonebook on 2022-09-30T11:13:20+05:30
 
 app = "hostingphonebook"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
+
+[build]
+  builder = "heroku/buildpacks:20"
 
 [env]
   PORT = "8080"

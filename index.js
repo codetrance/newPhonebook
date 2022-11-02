@@ -9,7 +9,8 @@ const cors = require("cors");
 const Phonebook = require("./models/entry");
 app.use(cors());
 app.use(express.static("build"));
-
+app.use(express.json());
+// app.use(requestLogger);
 // const url = `mongodb+srv://phonebookdb:lrszOtLHZ7eME4Sl@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
 
 let entries = [
@@ -35,23 +36,6 @@ let entries = [
   },
 ];
 
-// mongoose.connect(url);
-
-// const phonebookSchema = new mongoose.Schema({
-//   name: String,
-//   number: String,
-// });
-
-// phonebookSchema.set("toJSON", {
-//   transform: (document, returnedObject) => {
-//     returnedObject.id = returnedObject._id.toString();
-//     delete returnedObject._id;
-//     delete returnedObject._v;
-//   },
-// });
-
-// const Phonebook = mongoose.model("Phonebook", phonebookSchema);
-
 morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(morgan(":method :url :status :response-time[digits] :body"));
 
@@ -69,11 +53,39 @@ app.get("/info", (request, response) => {
   );
 });
 
-app.get("/api/entries/:id", (request, response) => {
-  Phonebook.findById(request.params.id).then((entry) => {
-    response.json(entry);
-  });
+// app.get("/api/entries/:id", (request, response) => {
+//   Phonebook.findById(request.params.id).then((entry) => {
+//     response.json(entry);
+//   });
+// });
+
+app.get("/api/entries/:id", (request, response, next) => {
+  Phonebook.findById(request.params.id)
+    .then((entry) => {
+      if (entry) {
+        response.json(entry);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      response.status(500).end();
+    });
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformed id" });
+  }
+  next(error);
+};
 
 app.delete("/api/entries/:id", (request, response) => {
   const id = Number(request.params.id);
@@ -81,8 +93,6 @@ app.delete("/api/entries/:id", (request, response) => {
 
   response.status(204).end();
 });
-
-app.use(express.json());
 
 // const generateId = () => {
 //   const maxId = entries.length > 0 ? Math.max(...entries.map((n) => n.id)) : 0;
@@ -117,6 +127,8 @@ app.post("/api/entries", (request, response) => {
 });
 
 // const accessLogStream = fs.createWriteStream(path.join(__C:\Users\PuneetKittur\fullstack_exercises\newPhonebook\logs,'access.log'),{flags:'a'})
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
