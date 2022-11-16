@@ -68,30 +68,19 @@ app.get("/api/entries/:id", (request, response, next) => {
         response.status(404).end();
       }
     })
-    .catch((error) => {
-      console.log(error);
-      response.status(500).end();
-    });
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
-const errorHandler = (error, request, response, next) => {
-  console.log(error.message);
-
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformed id" });
-  }
-  next(error);
-};
-
-app.delete("/api/entries/:id", (request, response) => {
-  const id = Number(request.params.id);
-  entries = entries.filter((entry) => entry.id !== id);
-
-  response.status(204).end();
+app.delete("/api/entries/:id", (request, response, next) => {
+  Phonebook.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 // const generateId = () => {
@@ -99,34 +88,34 @@ app.delete("/api/entries/:id", (request, response) => {
 //   return maxId + 1;
 // };
 
-app.post("/api/entries", (request, response) => {
+app.post("/api/entries", (request, response, next) => {
   const body = request.body;
 
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: "name or number missing",
-    });
-  } else if (
-    entries
-      .map((item) => item.name.toLowerCase())
-      .includes(body.name.toLowerCase())
-  ) {
-    return response.status(400).json({
-      error: "name already exists",
-    });
-  } else {
-    const entry = new Phonebook({
-      // id: generateId(),
-      name: body.name,
-      number: body.number,
-    });
-    entry.save().then((savedEntry) => {
+  const entry = new Phonebook({
+    name: body.name,
+    number: body.number,
+  });
+
+  entry
+    .save()
+    .then((savedEntry) => {
       response.json(savedEntry);
-    });
-  }
+    })
+    .catch((error) => next(error));
 });
 
 // const accessLogStream = fs.createWriteStream(path.join(__C:\Users\PuneetKittur\fullstack_exercises\newPhonebook\logs,'access.log'),{flags:'a'})
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformed id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
+  }
+  next(error);
+};
+
 app.use(unknownEndpoint);
 app.use(errorHandler);
 
