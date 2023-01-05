@@ -2,14 +2,22 @@ require("dotenv").config();
 const { response } = require("express");
 const express = require("express");
 const app = express();
+const http = require("http");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
 const cors = require("cors");
+const config = require("./utils/config");
+const logger = require("./utils/logger");
+const server = http.createServer(app);
 const Phonebook = require("./models/entry");
 app.use(cors());
 app.use(express.static("build"));
 app.use(express.json());
+
+server.listen(config.PORT, () => {
+  logger.info(`Server is RUNNING on port ${config.PORT}`);
+});
 // app.use(requestLogger);
 // const url = `mongodb+srv://phonebookdb:lrszOtLHZ7eME4Sl@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
 
