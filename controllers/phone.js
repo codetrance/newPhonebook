@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const Phonebook = require("../models/entry");
 
 morgan.token("body", (req) => JSON.stringify(req.body));
-app.use(morgan(":method :url :status :response-time[digits] :body"));
+notesRouter.use(morgan(":method :url :status :response-time[digits] :body"));
 
 notesRouter.get("/", (request, response) => {
   Phonebook.find({}).then((entries) => {
