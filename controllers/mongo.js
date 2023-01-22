@@ -7,9 +7,9 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-// const password = process.argv[2];
+const password = process.argv[2];
 
-// const url = `mongodb+srv://phonebookdb:${password}@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
+const url = `mongodb+srv://phonebookdb:${password}@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
 
 // mongoose.set("strictQuery", true); This was added to check if the Deprecation error goes away, but there was no luck so commented this out
 
