@@ -15,6 +15,8 @@ const logger = require("./utils/logger");
 
 const server = http.createServer(app);
 
+console.log("The DB is set to Test or Prod :", process.env);
+
 server.listen(config.PORT, () => {
   logger.info(`Server is RUNNING on port ... New format${config.PORT}`);
 });
