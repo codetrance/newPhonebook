@@ -14,7 +14,7 @@ const config = require("./utils/config");
 const logger = require("./utils/logger");
 
 const server = http.createServer(app);
-
+process.env.NODE_ENV = "test";
 console.log("The DB is set to Test or Prod :", process.env.NODE_ENV);
 
 server.listen(config.PORT, () => {
