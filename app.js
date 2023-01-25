@@ -11,10 +11,10 @@ const logger = require("./utils/logger");
 
 // const url = `mongodb+srv://phonebookdb:${password}@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
 
-logger.info("connecting to .... New format", config.TEST_MONGODB_URI);
+logger.info("connecting to .... New format", config.MONGODB_URI);
 
 mongoose
-  .connect(config.TEST_MONGODB_URI)
+  .connect(config.MONGODB_URI)
   .then(() => {
     logger.info("connected to MongoDB New format");
   })
