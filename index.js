@@ -7,7 +7,7 @@
 // const fs = require("fs");
 
 // const Phonebook = require("./models/entry");
-process.env.NODE_ENV = "test";
+// process.env.NODE_ENV = "test";
 const http = require("http");
 const app = require("./app");
 const config = require("./utils/config");
