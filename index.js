@@ -7,14 +7,14 @@
 // const fs = require("fs");
 
 // const Phonebook = require("./models/entry");
-
+process.env.NODE_ENV = "test";
 const http = require("http");
 const app = require("./app");
 const config = require("./utils/config");
 const logger = require("./utils/logger");
 
 const server = http.createServer(app);
-process.env.NODE_ENV = "test";
+
 console.log("The DB is set to Test or Prod :", process.env.NODE_ENV);
 
 server.listen(config.PORT, () => {
