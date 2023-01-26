@@ -7,7 +7,8 @@
 // const fs = require("fs");
 
 // const Phonebook = require("./models/entry");
-// process.env.NODE_ENV = "test";
+
+process.env.NODE_ENV = "test"; // This line is for setting the test vs production to point to database
 const http = require("http");
 const app = require("./app");
 const config = require("./utils/config");
