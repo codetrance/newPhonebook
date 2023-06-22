@@ -21,37 +21,9 @@ console.log("The DB is set to Test or Prod :", process.env.NODE_ENV);
 server.listen(config.PORT, () => {
   logger.info(`Server is RUNNING on port ... New format${config.PORT}`);
 });
+console.log("Step 1 executed");
 // app.use(requestLogger);
 // const url = `mongodb+srv://phonebookdb:lrszOtLHZ7eME4Sl@cluster0.um2252f.mongodb.net/?retryWrites=true&w=majority`;
-
-// let entries = [
-//   {
-//     id: 1,
-//     name: "Arto Hellas",
-//     number: "040-123456",
-//   },
-//   {
-//     id: 2,
-//     name: "Ada Lovelace",
-//     number: "39-44-5323523",
-//   },
-//   {
-//     id: 3,
-//     name: "Dan Abramov",
-//     number: "12-43-234345",
-//   },
-//   {
-//     id: 4,
-//     name: "Mary Poppendieck",
-//     number: "39-23-6423122",
-//   },
-// ];
-
-// app.get("/", (request, response) => {
-//   response.send("<h1>Hello World!<h1>");
-// });
-
-// app.get("/api/entries", (request, response) => {
 //   Phonebook.find({}).then((entries) => response.json(entries));
 // });
 

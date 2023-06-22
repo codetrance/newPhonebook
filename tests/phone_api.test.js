@@ -13,10 +13,6 @@ const initialEntries = [
     name: "Test Ada Lovelace",
     number: "39-44-5323523",
   },
-  {
-    name: "Test Andy Bramov",
-    number: "12-43-234345",
-  },
 ];
 
 beforeEach(async () => {
