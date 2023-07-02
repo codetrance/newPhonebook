@@ -1,9 +1,15 @@
-# fly.toml file generated for hostingphonebook on 2022-11-02T07:53:40+05:30
+# fly.toml app configuration file generated for hostingphonebook on 2023-06-29T16:22:30+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "hostingphonebook"
 kill_signal = "SIGINT"
 kill_timeout = 5
+primary_region = "sin"
 processes = []
+
+[build]
 
 [env]
   PORT = "8080"
@@ -14,7 +20,7 @@ processes = []
 
 [[services]]
   http_checks = []
-  internal_port = 8080
+  internal_port = 3000
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
