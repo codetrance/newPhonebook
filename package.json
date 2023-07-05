@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/codetrance/newPhonebook/issues"
   },
-  "homepage": "https://github.com/codetrance/newPhonebook#readme",
+  "homepage": "https://github.com/codetrance/new#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
